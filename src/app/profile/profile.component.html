@@ -1,0 +1,53 @@
+
+<div class="container" id="changeEmail">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-6">
+        <img src="assets\account.png">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="text-center">
+              <h3><i class="fa fa-lock fa-4x"></i></h3>
+              <h2 class="text-center">Ändra Email</h2>
+              <div class="panel-body">
+                <form id="register-form" role="form" autocomplete="off" class="form" method="post">
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
+                    <input id="email" name="newEmail" placeholder="Ny email" class="form-control"  type="email" [(ngModel)]="newEmail">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input name="recover-submit" class="btn btn-lg btn-success btn-block" value="Ändra email" type="submit" (click)='this.changeEmail()' >
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-md-offset-6">
+          <img src="assets\password.png">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="text-center">
+                <h3><i class="fa fa-lock fa-4x"></i></h3>
+                <h2 class="text-center">Ändra lösenord</h2>
+                <div class="panel-body">
+                  <form id="register-form" role="form" autocomplete="off" class="form" method="post">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
+                      <input name="newPassword" id="password" placeholder="Nytt lösenord" class="form-control" type="password" [(ngModel)]="newPassword">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input name="recover-submit" class="btn btn-lg btn-success btn-block" value="Ändra lösenord" type="submit" (click)='this.changePassword()' >
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>

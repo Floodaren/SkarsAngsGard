@@ -1,0 +1,38 @@
+<div id="ShowYear">{{year}}</div>
+<div class="table" id="roadWorkNames">
+  <table class="table">
+    <thead>
+      <th style="text-align: center">Vecka</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of personMarkedWeeks">
+        <th scope="row" id="specificNameStyle"><p id="personName">{{person.name}}</p></th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="table-responsive" id="roadTable">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="weekNumber" *ngFor="let item of numberOfWeeks.weeks">{{item.weeknr}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of personMarkedWeeks; let i = index">
+        <td *ngFor="let item of numberOfWeeks.weeks; let x = index">
+          <button class="pressedWeek" (click)="pressedWeek(person.personId,person.markedWeeks[x])">
+            <div class="weekBox" *ngIf="person.markedWeeks[x].checkedOrNot == 1; else elseblock" [style.background-color]="'black'">
+              <div class="weekNumber"></div>
+            </div>
+            <ng-template #elseblock>
+              <div class="weekBox" [style.background-color]="'white'">
+                <div class="weekNumber"></div>
+              </div>
+            </ng-template>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

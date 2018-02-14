@@ -1,0 +1,47 @@
+.weekBox
+{
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.weekNumber
+{
+    text-align: center;
+}
+
+.pressedWeek
+{
+    background: white;
+    border: none;
+}
+
+#ShowYear
+{
+    font-size: 200%;
+}
+
+#roadWorkNames
+{
+width: 20%;
+float: left;
+}
+
+#specificNameStyle
+{
+    
+    width: 50px;
+    height: 83px;
+}
+
+#personName
+{
+    text-align: center;
+    margin-top: 7%;
+}
+
+#roadTable
+{
+    width: 80%;
+    float: right;
+}

@@ -1,0 +1,104 @@
+<div *ngIf="loggedInOrNot == false" class="container" >
+  <div class="row">
+    <div *ngFor="let item of salesItems; let i = index" class="col-md-4 col-md-offset-6" style="border: 1px solid black; border-radius: 5px;" >
+      <img class="advertisementPic" src="assets\examplepic.jpg">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="text-center">
+            <h3><i class="fa fa-lock fa-4x"></i></h3>
+            <h2 class="text-center">{{item.Heading}}</h2>
+            <ng-template #content let-c="close" let-d="dismiss">
+              <div class="modal-header">
+                <h4 class="modal-title">{{item.Heading}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>{{item.Text}}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+              </div>
+            </ng-template>
+            <button class="btn btn-success" (click)="open(content, item.Id)">Visa</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<div *ngIf="loggedInOrNot == true">
+  <button type="button" class="btn btn-primary" style="float: center; width: 25%" (click)="newAddModal(newAddValues)">Skapa ny</button>
+  <ng-template #newAddValues let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Ny annons</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input #inputHeading type="text" class="form-control" placeholder="Rubrik..." value="">
+      <input #inputText type="text" class="form-control" placeholder="Text..." value="">
+      <div class="form-group">
+          <input type="file" id="file" (change)="handleFileInput($event.target.files)">
+      </div>
+    </div>
+    <div class="modal-footer">           
+      <button type="button" class="btn btn-primary" (click)="newAddSave(inputHeading.value,inputText.value);d('Saved Changes')">Skapa</button>
+      <button type="button" class="btn btn-danger" (click)="d('Close click')">Stäng</button>
+    </div>
+  </ng-template>
+  <div class="container">
+    <div class="row">
+      <div *ngFor="let item of salesItems; let i = index" class="col-md-4 col-md-offset-6">
+        <img class="advertisementPic" src="assets\addPictures\testPic.jpg">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="text-center">
+              <h3><i class="fa fa-lock fa-4x"></i></h3>
+              <h2 class="text-center">{{item.Heading}}</h2>
+              <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                  <h4 class="modal-title">{{item.Heading}}</h4>
+                  <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>{{item.Text}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="open2(content2); d('Cross click')">Ändra</button>
+                  <button type="button" class="btn btn-danger" (click)="d('Close click')">Stäng</button>
+                </div>
+              </ng-template>
+              <button class="btn btn-success" (click)="open(content)">Visa</button>
+            </div>
+          </div>
+        </div>
+        <ng-template #content2 let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <input #inputHeading type="text" class="form-control" value="{{item.Heading}}">
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input #inputText type="text" class="form-control" value="{{item.Text}}">
+          </div>
+          <div class="modal-footer">           
+              <button type="button" class="btn btn-primary" (click)="saveAddChanges(item.Id, inputHeading.value,inputText.value); d('Saved Changes')">Spara</button>
+              <button type="button" class="btn btn-danger" (click)="removeAdd(item.Id); d('Saved Changes')">Radera</button>
+            <button type="button" class="btn btn-danger" (click)="d('Close click')">Stäng</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+</div>
+</div>
+
+
+
