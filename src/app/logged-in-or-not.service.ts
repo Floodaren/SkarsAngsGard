@@ -8,11 +8,11 @@ export class LoggedInOrNotService {
 
   checkLoginStatus()
   {   
-    if (this._cookieService.get('LoggedInOrNot') == "-696604331-421208435-20128130881574909949-1082314408182022308-1922705072-1223215422")
+    if (this._cookieService.get('LoggedInOrNot') == "206772e4270ed3b42adf6b3d655b42a7e26ee3ee362cf08ee7390d8e7de5d243")
     {
       this.loggedInOrNot = true;
     }
-    else if (this._cookieService.get('LoggedInOrNot') == "5436505326552831247192850531700479655-496049170908914830-4156913782112213571")
+    else if (this._cookieService.get('LoggedInOrNot') == "d67aa955e6e4de8d8806e8e05ddf37fdbf7d31580ad970a48d65d950b71736c2")
     {
       this.loggedInOrNot = false;
     }

@@ -20,14 +20,17 @@ export class NavBarComponent implements OnInit {
 
   async signIn()
   {
-    var encryptedPassword = CryptoJS.SHA256(this.inputPassword);
-    var encryptedMail = CryptoJS.SHA256(this.inputEmail);
+    var encryptedPassword = CryptoJS.SHA256(this.inputPassword).toString(CryptoJS.enc.Hex);
+    console.log(encryptedMail);
+    var encryptedMail = CryptoJS.SHA256(this.inputEmail).toString(CryptoJS.enc.Hex);
+    console.log(encryptedPassword);
     await axios.post('http://localhost:3030/SignIn', {
       email: encryptedMail,
       password: encryptedPassword 
     })
     .then(result => {
       this.loggedInOrNot = result.data.result;
+      console.log(result.data.result);
       this._cookieService.put('LoggedInOrNot', this.loggedInOrNot);
     })
     .catch(function (error) {

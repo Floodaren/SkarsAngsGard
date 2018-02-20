@@ -3,8 +3,6 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 
-
-
 @Component({
   selector: 'app-sale-section',
   templateUrl: './sale-section.component.html',
@@ -85,6 +83,7 @@ export class SaleSectionComponent implements OnInit {
 
   newAddSave(newAddHeading,newAddText): any{
     var fileToUpload: File = this.fileToUpload;
+    console.log(fileToUpload);
     const formData: FormData = new FormData();
     formData.append("image", fileToUpload, fileToUpload.name);
     var filename = fileToUpload.name;
@@ -101,6 +100,7 @@ export class SaleSectionComponent implements OnInit {
       console.log(error);
       alert("Kunde inte kontakta servern");
     });
+    
   }
 
   handleFileInput(files: FileList)

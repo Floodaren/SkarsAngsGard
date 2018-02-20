@@ -3,6 +3,7 @@ import { LoggedInOrNotService } from '../logged-in-or-not.service';
 import { Router } from "@angular/router";
 import axios from 'axios';
 import { ViewChild } from '@angular/core/src/metadata/di';
+import * as CryptoJS from 'crypto-js';
 
 
 
@@ -20,8 +21,9 @@ export class ProfileComponent implements OnInit {
 
   changeEmail()
   {
+    const hashEmail = CryptoJS.SHA256(this.newEmail).toString(CryptoJS.enc.Hex);
     axios.post('http://localhost:3030/ChangeEmail', {
-      newEmail: this.newEmail
+      newEmail: hashEmail
     })
     .then(result => {
       console.log(result);
@@ -37,8 +39,9 @@ export class ProfileComponent implements OnInit {
 
   changePassword()
   {
+    const hashPassword = CryptoJS.SHA256(this.newPassword).toString(CryptoJS.enc.Hex);
     axios.post('http://localhost:3030/ChangePassword', {
-      newPassword: this.newPassword
+      newPassword: hashPassword
     })
     .then(result => {
       console.log(result);

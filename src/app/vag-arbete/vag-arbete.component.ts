@@ -29,7 +29,7 @@ export class VagArbeteComponent implements OnInit {
   getYear = new Date();
   year = this.getYear.getFullYear();
   constructor() {
-    this.groupNumbers();
+    //this.groupNumbers();
     this.getGroupMembers();
     this.getMarkedWeeks();
    }

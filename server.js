@@ -17,7 +17,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'skarsanggardDB'
+  database : 'skaranggardDB'
 });
 
 connection.connect(function(err) {
@@ -70,7 +70,7 @@ app.get('/GetSalesItems', function(req,res){
 
 //#region Road work 
 app.post('/RoadBookForPerson', function(req, res) {
-  var user = {userId: req.body.userId, markedWeekId: req.body.markedWeek, markedOrNot: req.body.markedOrNot};
+  const user = {userId: req.body.userId, markedWeekId: req.body.markedWeek, markedOrNot: req.body.markedOrNot};
   if (user.markedOrNot == 0)
   {
     connection.query('DELETE FROM RoadGroupMembersXMarkedWeeks WHERE PersonId = ' + "'" + user.userId +  "'" + ' AND MarkedWeeksId = ' + "'" + user.markedWeekId +  "'",
@@ -104,42 +104,21 @@ app.post('/RoadBookForPerson', function(req, res) {
 
 //#region  Sign in
 app.post('/SignIn', function(req, res) {
-  var user = {usermail: req.body.email, userpassword: req.body.password};
-  var emailToDb = "";
-  var passwordToDb = "";
-
-  user.usermail.words.forEach(element => {
-    var convertToString = String(element);
-    emailToDb += convertToString;
-  });
-
-  user.userpassword.words.forEach(element => {
-    var convertToString = String(element);
-    passwordToDb += convertToString;
-  });
-
-  connection.query('SELECT * FROM Login WHERE Email = "' + emailToDb + '" AND Password = "' + passwordToDb + '"', 
+  const user = {usermail: req.body.email, userpassword: req.body.password};
+  connection.query('SELECT * FROM Login WHERE Email = "' + user.usermail + '" AND Password = "' + user.userpassword + '"', 
   function(error,result)
   {
-    var hashResult = "";
-    var sendResult = "";
+    let hashResult = "";
+    let sendResult = "";
     if (result == 0)
     {
-      hashResult = CryptoJS.SHA256("klm234YiP?");
-      hashResult.words.forEach(element => {
-        var convertToString = String(element);
-        sendResult += convertToString;
-      });
-      res.send({result: sendResult});
+      hashResult = CryptoJS.SHA256("klm234YiP?").toString(CryptoJS.enc.Hex);
+      res.send({result: hashResult});
     }
     else 
     {
-      hashResult = CryptoJS.SHA256("YiaZ2710?!B");
-      hashResult.words.forEach(element => {
-        var convertToString = String(element);
-        sendResult += convertToString;
-      });
-      res.send({result: sendResult});
+      hashResult = CryptoJS.SHA256("YiaZ2710?!B").toString(CryptoJS.enc.Hex);
+      res.send({result: hashResult});
     }
   });
 });
@@ -147,15 +126,8 @@ app.post('/SignIn', function(req, res) {
 
 //#region Update user
 app.post('/ChangeEmail', function(req, res) {
-  var newCredentials = {newEmail: req.body.newEmail};
-  var hashResult = CryptoJS.SHA256(newCredentials.newEmail);
-  var sendResult = "";
-  hashResult.words.forEach(element => {
-    var convertToString = String(element);
-    sendResult += convertToString;
-  });
-  
-  connection.query('UPDATE Login SET Email = "' + sendResult + '"',
+  const newCredentials = {newEmail: req.body.newEmail};  
+  connection.query('UPDATE Login SET Email = "' + newCredentials.newEmail + '"',
   function(error, result){
     if (result == 0)
     {
@@ -169,15 +141,8 @@ app.post('/ChangeEmail', function(req, res) {
 });
 
 app.post('/ChangePassword', function(req, res) {
-  var newCredentials = {newPassword: req.body.newPassword};
-  var hashResult = CryptoJS.SHA256(newCredentials.newPassword);
-  var sendResult = "";
-  hashResult.words.forEach(element => {
-    var convertToString = String(element);
-    sendResult += convertToString;
-  });
-  
-  connection.query('UPDATE Login SET Password = "' + sendResult + '"',
+  const newCredentials = {newPassword: req.body.newPassword};  
+  connection.query('UPDATE Login SET Password = "' + newCredentials.newPassword + '"',
   function(error, result){
     if (result == 0)
     {
@@ -194,15 +159,14 @@ app.post('/ChangePassword', function(req, res) {
 //#region Sales items
 app.post('/NewAdd', upload.single('image'), function(req, res) {
   const add = {heading: req.body.heading, text: req.body.text}
-  // var file = {file: req.body.file, filename: req.body.filename};
-  const { file, filename } = req.body;
-  const img = req.body.file;  
+  var file = {file: req.body.file, filename: req.body.filename};
   let subheading = "";
-  const loginId = 3;
+  const loginId = 2;
   let picSavedOrNot = false;
   let addAddedOrNot = false;
   let latestId;
 
+  res.send({hej: "hej"});
   //Save file to folder
 
 
@@ -235,7 +199,7 @@ app.post('/NewAdd', upload.single('image'), function(req, res) {
   // If file is added to this folder wihtout error. Insert a new sales item in the db
   if (picSavedOrNot == true)
   {
-    connection.query('INSERT INTO SalesItems (Heading,Subheading,Text,LoginId) VALUES ('+add.heading+","+subheading+","+add.text+","+loginId+")",
+    connection.query('INSERT INTO SalesItems (Heading,Category,Text,LoginId) VALUES ('+add.heading+","+subheading+","+add.text+","+loginId+")",
     function(error, result){
       if (result == 0)
       {
