@@ -157,9 +157,15 @@ app.post('/ChangePassword', function(req, res) {
 //#endregion Update user
 
 //#region Sales items
+
+
 app.post('/NewAdd', upload.single('image'), function(req, res) {
-  const add = {heading: req.body.heading, text: req.body.text}
+  const add = {heading: req.body.heading, text: req.body.text};
   var file = {file: req.body.file, filename: req.body.filename};
+  console.log(req.file);
+  req.file.filename = req.file.originalname;
+  req.file.path = req.file.destination + req.file.filename;
+  console.log(req.file);
   let subheading = "";
   const loginId = 2;
   let picSavedOrNot = false;

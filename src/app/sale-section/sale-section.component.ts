@@ -81,15 +81,31 @@ export class SaleSectionComponent implements OnInit {
     });
   }
 
-  newAddSave(newAddHeading,newAddText): any{
+  async testUpload()
+  {
     var fileToUpload: File = this.fileToUpload;
-    console.log(fileToUpload);
+    const formData: FormData = new FormData();
+    formData.append("image", fileToUpload, fileToUpload.name);
+    axios.post('http://localhost:3030/NewAdd',formData)
+    .then(result => {
+      console.log(result);
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Kunde inte kontakta servern");
+    });
+  }
+
+  async newAddSave(newAddHeading,newAddText) {
+    /*
+    var fileToUpload: File = this.fileToUpload;
     const formData: FormData = new FormData();
     formData.append("image", fileToUpload, fileToUpload.name);
     var filename = fileToUpload.name;
-    axios.post('http://localhost:3030/NewAdd', {
-      file: formData,
-      filename: filename,
+    */
+    await this.testUpload();
+    /*
+    await axios.post('http://localhost:3030/NewAdd', {
       heading: newAddHeading,
       text: newAddText
     })
@@ -100,7 +116,7 @@ export class SaleSectionComponent implements OnInit {
       console.log(error);
       alert("Kunde inte kontakta servern");
     });
-    
+    */
   }
 
   handleFileInput(files: FileList)
