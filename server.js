@@ -2,11 +2,13 @@ var CryptoJS = require('crypto-js');
 var mysql = require('mysql');
 var express = require('express')
 var bodyParser = require('body-parser');
+require('dotenv').config();
 var app = express();
 
 var multer = require('multer');
 var path = "src/assets/addPictures/";
 const upload = multer({dest: path});
+var token = require('crypto-token');
 
 app.listen(3030, function () {
   console.log('Express server is online on port 3030!');
@@ -14,10 +16,10 @@ app.listen(3030, function () {
 
 //#region Connection to DB and App-use
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'skaranggardDB'
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PASSWORD,
+  database : process.env.DB_DATABASE
 });
 
 connection.connect(function(err) {
@@ -105,6 +107,7 @@ app.post('/RoadBookForPerson', function(req, res) {
 //#region  Sign in
 app.post('/SignIn', function(req, res) {
   const user = {usermail: req.body.email, userpassword: req.body.password};
+  setToken(2);
   connection.query('SELECT * FROM Login WHERE Email = "' + user.usermail + '" AND Password = "' + user.userpassword + '"', 
   function(error,result)
   {
@@ -287,4 +290,35 @@ app.post('/RemoveAdd', function(req, res) {
 
 //#endregion Post
 
+//#region Handle token
+function setToken(loginId)
+{
+  const token = require('crypto-token');
+  const tokenToSet = "";
+  token(function(err,res){
+    tokenToSet = res;
+  });
+  const tokenCreatedAt = new Date().toISOString();
+  console.log(tokenCreatedAt);
+  /*
+
+  connection.query('INSERT INTO TokenTable SET Value = "' + tokenToSet + '", LoginId = "' + loginId + '", ',
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({result: "Något gick fel, vänligen försök igen"});
+    }
+    else
+    {
+      res.send({result: "Annons uppdaterad"});
+    }
+  });
+  */
+}
+
+function validateToken(token)
+{
+  
+}
+//#endregion
 
