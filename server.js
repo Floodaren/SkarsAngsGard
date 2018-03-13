@@ -9,6 +9,7 @@ var multer = require('multer');
 var path = "src/assets/addPictures/";
 const upload = multer({dest: path});
 var token = require('crypto-token');
+var moment = require('moment');
 
 app.listen(3030, function () {
   console.log('Express server is online on port 3030!');
@@ -107,16 +108,20 @@ app.post('/RoadBookForPerson', function(req, res) {
 //#region  Sign in
 app.post('/SignIn', function(req, res) {
   const user = {usermail: req.body.email, userpassword: req.body.password};
-  setToken(2);
   connection.query('SELECT * FROM Login WHERE Email = "' + user.usermail + '" AND Password = "' + user.userpassword + '"', 
   function(error,result)
   {
     let hashResult = "";
     let sendResult = "";
-    if (result == 0)
+    if (result != 0)
     {
-      hashResult = CryptoJS.SHA256("klm234YiP?").toString(CryptoJS.enc.Hex);
-      res.send({result: hashResult});
+      let tokenInsertedOrNot = setToken(2);
+      console.log(tokenInsertedOrNot);
+      if (tokenInsertedOrNot == true)
+      {
+        hashResult = CryptoJS.SHA256("klm234YiP?").toString(CryptoJS.enc.Hex);
+        res.send({result: hashResult});
+      }    
     }
     else 
     {
@@ -293,28 +298,33 @@ app.post('/RemoveAdd', function(req, res) {
 //#region Handle token
 function setToken(loginId)
 {
-  const token = require('crypto-token');
-  const tokenToSet = "";
-  token(function(err,res){
-    tokenToSet = res;
-  });
-  const tokenCreatedAt = new Date().toISOString();
-  console.log(tokenCreatedAt);
-  /*
+  let tokenToSet = token(32);
+  const tokenCreatedAt = new Date().toLocaleString();
+  let tokenExpiresAt = new Date();
+  tokenExpiresAt.setHours(tokenExpiresAt.getHours() + 3);
+  let tokenExpiresAt2 = tokenExpiresAt.toLocaleString();
+  let tokenCreatedOrNot = false;
 
-  connection.query('INSERT INTO TokenTable SET Value = "' + tokenToSet + '", LoginId = "' + loginId + '", ',
+  
+  connection.query('INSERT INTO TokenTable (Value, LoginId, CreatedAt, ExpiresAt, Valid) VALUES ("' + tokenToSet + '", ' + loginId + ', "' + tokenCreatedAt + '", "' + tokenExpiresAt2 + '", ' + 1 + ")",
   function(error, result){
     if (result == 0)
     {
-      res.send({result: "Något gick fel, vänligen försök igen"});
+      tokenCreatedOrNot = false;
+      console.log(tokenCreatedOrNot);
+      return tokenCreatedOrNot;
     }
     else
     {
-      res.send({result: "Annons uppdaterad"});
+      tokenCreatedOrNot = true;
+      console.log(tokenCreatedOrNot);
+      return tokenCreatedOrNot;
     }
   });
-  */
 }
+
+
+
 
 function validateToken(token)
 {
