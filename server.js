@@ -1,3 +1,4 @@
+//#region Libraries
 var CryptoJS = require('crypto-js');
 var mysql = require('mysql');
 var express = require('express')
@@ -10,7 +11,8 @@ var path = "src/assets/addPictures/";
 const upload = multer({dest: path});
 var token = require('crypto-token');
 var moment = require('moment');
-
+//#endregion
+//#region Server connection
 app.listen(3030, function () {
   console.log('Express server is online on port 3030!');
 });
@@ -34,6 +36,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+//#endregion
 //#endregion
 
 //#region Get methods
@@ -109,15 +112,15 @@ app.post('/RoadBookForPerson', function(req, res) {
 app.post('/SignIn', function(req, res) {
   const user = {usermail: req.body.email, userpassword: req.body.password};
   connection.query('SELECT * FROM Login WHERE Email = "' + user.usermail + '" AND Password = "' + user.userpassword + '"', 
-  function(error,result)
+  async function(error,result)
   {
     let hashResult = "";
     let sendResult = "";
     if (result != 0)
     {
-      let tokenInsertedOrNot = setToken(2);
-      console.log(tokenInsertedOrNot);
-      if (tokenInsertedOrNot == true)
+      let tokenInsertedOrNot;
+      await setToken(result[0].Id).then(await function(result){this.tokenInsertedOrNot = result; console.log("Callback " + result);});
+      if (await tokenInsertedOrNot == true)
       {
         hashResult = CryptoJS.SHA256("klm234YiP?").toString(CryptoJS.enc.Hex);
         res.send({result: hashResult});
@@ -296,29 +299,27 @@ app.post('/RemoveAdd', function(req, res) {
 //#endregion Post
 
 //#region Handle token
-function setToken(loginId)
+async function setToken(loginId)
 {
   let tokenToSet = token(32);
   const tokenCreatedAt = new Date().toLocaleString();
   let tokenExpiresAt = new Date();
   tokenExpiresAt.setHours(tokenExpiresAt.getHours() + 3);
   let tokenExpiresAt2 = tokenExpiresAt.toLocaleString();
-  let tokenCreatedOrNot = false;
+  
 
   
-  connection.query('INSERT INTO TokenTable (Value, LoginId, CreatedAt, ExpiresAt, Valid) VALUES ("' + tokenToSet + '", ' + loginId + ', "' + tokenCreatedAt + '", "' + tokenExpiresAt2 + '", ' + 1 + ")",
+  await connection.query('INSERT INTO TokenTable (Value, LoginId, CreatedAt, ExpiresAt, Valid) VALUES ("' + tokenToSet + '", ' + loginId + ', "' + tokenCreatedAt + '", "' + tokenExpiresAt2 + '", ' + 1 + ")",
   function(error, result){
     if (result == 0)
     {
-      tokenCreatedOrNot = false;
-      console.log(tokenCreatedOrNot);
-      return tokenCreatedOrNot;
+      console.log("A token wasn't created");
+      return false
     }
     else
     {
-      tokenCreatedOrNot = true;
-      console.log(tokenCreatedOrNot);
-      return tokenCreatedOrNot;
+      console.log("A token was created");
+      return true;
     }
   });
 }
